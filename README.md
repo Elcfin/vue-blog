@@ -1,24 +1,8 @@
-# blog
+## 搭建个人博客
 
-## Project setup
-```
-npm install
-```
+### 2021/7/31
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+#### 路由
 
-### Compiles and minifies for production
-```
-npm run build
-```
+单页面前端路由，选择 vue-router4
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
