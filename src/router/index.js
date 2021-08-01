@@ -7,23 +7,33 @@ const routes = [
   },
   {
     path: "/home",
-    name: "Home",
+    name: "home",
     component: () => Promise.resolve(require("@/components/Home.vue")),
   },
   {
     path: "/about",
-    name: "About",
+    name: "about",
     component: () => Promise.resolve(require("@/components/About.vue")),
   },
   {
     path: "/category",
-    name: "Category",
+    name: "category",
     component: () => Promise.resolve(require("@/components/Category.vue")),
   },
   {
     path: "/article",
-    name: "Article",
+    name: "article",
     component: () => Promise.resolve(require("@/components/Article.vue")),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => Promise.resolve(require("@/components/Login.vue")),
+  },
+  {
+    path: "/manager",
+    name: "manager",
+    component: () => Promise.resolve(require("@/components/Manager.vue")),
   },
 ];
 

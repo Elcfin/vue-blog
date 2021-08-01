@@ -7,7 +7,8 @@
              alt="more"></div>
     </div>
     <top-bar-side class="top-bar-side"
-                  :class="{'side-show': isSideShow}"></top-bar-side>
+                  :class="{'side-show': isSideShow}"
+                  @changePage="changePage"></top-bar-side>
   </div>
 </template>
 
@@ -28,6 +29,11 @@ export default {
       ],
       isSideShow: false
     }
+  },
+  methods: {
+    changePage(selected) {
+      this.$emit('changePage', selected)
+    }
   }
 }
 </script>
@@ -43,6 +49,7 @@ export default {
   line-height: 60px;
   background-color: @dark;
   border-radius: 0;
+  z-index: 2;
 
   .wrap {
     margin: auto;

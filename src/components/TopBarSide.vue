@@ -15,7 +15,8 @@
     <div class="navbar">
       <div class="item"
            v-for="(item, index) in items"
-           :key="index">{{ item }}</div>
+           :key="index"
+           @click="$emit('changePage',item.enTitle)">{{ item.znTitle }}</div>
     </div>
   </div>
 </template>
@@ -27,7 +28,11 @@ export default {
     return {
       author: 'Elcfin',
       discription: '草木不朽',
-      items: ['日志', '分类', '关于']
+      items: [
+        { icon: '', enTitle: 'home', znTitle: '日志' },
+        { icon: '', enTitle: 'category', znTitle: '分类' },
+        { icon: '', enTitle: 'about', znTitle: '关于' }
+      ]
     }
   }
 }
@@ -91,6 +96,14 @@ export default {
       line-height: 40px;
       background-color: @grey;
       border-radius: 6px;
+      cursor: pointer;
+      transition: color 0.6s, background-color 0.6s;
+    }
+
+    .item:hover {
+      color: @font-color-light;
+      background-color: @dark;
+      transition: color 0.6s, background-color 0.6s;
     }
   }
 }

@@ -1,44 +1,64 @@
 <template>
-  <top-bar class='top-bar'></top-bar>
+  <top-bar class='top-bar'
+           @changePage="changePage"></top-bar>
   <div class='app'>
     <side-bar class='side-bar'
               @changePage="changePage"></side-bar>
-    <router-view class='content'></router-view>
+    <router-view class='content'
+                 @delete="deleteInfo"
+                 @editor="editorInfo"></router-view>
+    <Footer class='footer'></Footer>
   </div>
-  <Footer class='footer'></Footer>
 </template>
 
 <script>
+import { provide } from 'vue'
 import { useRouter } from 'vue-router'
+import { state } from '@/store/'
 
 import TopBar from '@/components/TopBar.vue'
 import SideBar from '@/components/SideBar.vue'
 import Footer from '@/components/Footer.vue'
 
+const routerChange = () => {
+  const router = useRouter()
+  const changePage = (selected) => {
+    router.push({
+      name: selected
+    })
+  }
+  return {
+    changePage
+  }
+}
+
 export default {
   name: 'App',
   components: { SideBar, Footer, TopBar },
   setup() {
-    const router = useRouter()
-    const changePage = (selected) => {
-      router.push({
-        name: selected
-      })
-    }
+    const { changePage } = routerChange()
+
+    provide('state', state)
+
     return {
       changePage
     }
   },
-  methods: {}
+  methods: {
+    deleteInfo(item, status) {
+      item.status = status
+    },
+    editorInfo(item, status) {
+      item.status = status
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .app {
   margin: auto;
-  margin-top: 10px;
   width: 90vw;
-  min-height: 1080px;
 }
 
 .top-bar {
@@ -53,28 +73,37 @@ export default {
 }
 
 .content {
-  border-top: 60px solid transparent;
+  border-top: 70px solid transparent;
+}
+
+.footer {
+  border-top: 10px solid transparent;
 }
 
 @media (min-width: 980px) {
   .app {
-    width: 80vw;
     max-width: 1060px;
   }
 
   .top-bar {
-    display: none;
+    top: -60px;
   }
 
   .side-bar {
     display: block;
     position: fixed;
+    border-top: 10px solid transparent;
   }
 
   .content {
     box-sizing: border-box;
-    border-top: none;
-    border-left: 230px solid transparent;
+    border-top: 0;
+    border-top: 10px solid transparent;
+    border-left: 235px solid transparent;
+  }
+
+  .footer {
+    border-left: 235px solid transparent;
   }
 } ;
 </style>>

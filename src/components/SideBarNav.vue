@@ -12,7 +12,8 @@
       <div class='item'
            v-for='(item, index) in items'
            :key='index'
-           :class='{selected:selected===item.enTitle}'
+           :class='{selected:selected===item.enTitle,
+           manager:item.enTitle==="manager"&&!state.token_status}'
            @click="selected = item.enTitle;
            changePage()">{{ item.znTitle }}</div>
     </div>
@@ -20,19 +21,27 @@
 </template>
 
 <script>
+import { inject } from 'vue'
+
 export default {
   name: 'SideBarNav',
+  setup() {
+    const state = inject('state')
+    return { state }
+  },
   data: function () {
     return {
       title: "Elcfin's Blog",
       subTitle: '仲夏夜茫 七月未央',
       items: [
-        { icon: '', enTitle: 'Home', znTitle: '首页' },
-        { icon: '', enTitle: 'About', znTitle: '关于' },
-        { icon: '', enTitle: 'Category', znTitle: '分类' },
-        { icon: '', enTitle: 'Article', znTitle: '归档' }
+        { icon: '', enTitle: 'home', znTitle: '首页' },
+        { icon: '', enTitle: 'about', znTitle: '关于' },
+        { icon: '', enTitle: 'category', znTitle: '分类' },
+        { icon: '', enTitle: 'article', znTitle: '归档' },
+        { icon: '', enTitle: 'login', znTitle: '登录' },
+        { icon: '', enTitle: 'manager', znTitle: '管理' }
       ],
-      selected: 'Home'
+      selected: this.state.currentPage
     }
   },
   methods: {
@@ -50,6 +59,11 @@ export default {
   &:extend(.common-block);
 
   overflow: hidden;
+  transition: box-shadow 0.6s;
+
+  &:hover {
+    box-shadow: 0 0 10px #555;
+  }
 
   .top {
     box-sizing: border-box;
@@ -79,17 +93,23 @@ export default {
       padding: 0 20px;
       height: 30px;
       font-size: 12px;
-      transition: background-color 0.6s;
+      cursor: pointer;
+      transition: color 0.6s, background-color 0.6s;
 
       &:hover {
-        background-color: @grey;
-        cursor: pointer;
-        transition: background-color 0.6s;
+        color: @font-color-light;
+        background-color: @dark;
+        transition: color 0.6s, background-color 0.6s;
       }
     }
 
     .selected {
-      background-color: @grey;
+      color: @font-color-light;
+      background-color: @dark;
+    }
+
+    .manager {
+      display: none;
     }
   }
 }

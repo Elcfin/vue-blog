@@ -2,7 +2,7 @@
   <div>
     <div class='side-bar'>
       <side-bar-nav @changePage="changePage"></side-bar-nav>
-      <side-bar-overview></side-bar-overview>
+      <side-bar-overview @changePage="changePage"></side-bar-overview>
     </div>
   </div>
 

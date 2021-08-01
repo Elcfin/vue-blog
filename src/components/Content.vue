@@ -1,10 +1,28 @@
 <template>
-  <div class="content"></div>
+  <div class="content">
+    <v-md-editor v-model="text"
+                 height="400px"
+                 @save="saveText"></v-md-editor>
+    <v-md-preview :text="text"></v-md-preview>
+  </div>
+
 </template>
 
 <script>
 export default {
-  name: 'Content'
+  name: 'Content',
+  data: function () {
+    return {
+      text: ' '
+    }
+  },
+  computed: {},
+  methods: {
+    saveText() {
+      const text = this.text
+      console.log(text)
+    }
+  }
 }
 </script>
 
