@@ -27,6 +27,7 @@ const routerChange = () => {
       name: selected
     })
   }
+
   return {
     changePage
   }
@@ -73,7 +74,7 @@ export default {
 }
 
 .content {
-  border-top: 70px solid transparent;
+  border-top: 75px solid transparent;
 }
 
 .footer {
@@ -82,7 +83,8 @@ export default {
 
 @media (min-width: 980px) {
   .app {
-    max-width: 1060px;
+    max-width: 1080px;
+    min-height: 720px;
   }
 
   .top-bar {

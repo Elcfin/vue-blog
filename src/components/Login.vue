@@ -29,17 +29,13 @@ export default {
 
       try {
         const result = await apiLogin(data)
-        const _this = this
         window.sessionStorage.setItem('token', result.data.token)
-        _this.state.token_status = true
-        setTimeout(() => (_this.state.token_status = false), 3600000)
       } catch (e) {
         console.log(e.message)
       }
     },
     logout() {
       window.sessionStorage.removeItem('token')
-      this.state.token_status = false
     }
   }
 }

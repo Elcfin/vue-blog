@@ -3,7 +3,8 @@
     <v-md-editor v-model="text"
                  height="400px"
                  @save="saveText"></v-md-editor>
-    <v-md-preview :text="text"></v-md-preview>
+    <v-md-editor v-model="text"
+                 mode="preview"></v-md-editor>
   </div>
 
 </template>

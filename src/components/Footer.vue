@@ -19,8 +19,7 @@ export default {
 @import '@/assets/style/base.less';
 
 .footer {
-  height: 60px;
-  line-height: 60px;
+  padding: 25px 0;
   text-align: center;
   color: @font-color-grey;
   font-size: 12px;

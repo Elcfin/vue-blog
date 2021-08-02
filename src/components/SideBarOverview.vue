@@ -7,10 +7,10 @@
       </div>
     </div>
     <div class="author">
-      {{ author }}
+      {{ state.author }}
     </div>
     <div class="discription">
-      {{ discription }}
+      {{ state.discription }}
     </div>
     <!-- <div class="navbar">
       <div class="item"
@@ -22,18 +22,16 @@
 </template>
 
 <script>
+import { inject } from 'vue'
+
 export default {
   name: 'SideBarOverview',
+  setup() {
+    const state = inject('state')
+    return { state }
+  },
   data: function () {
-    return {
-      author: 'Elcfin',
-      discription: '草木不朽'
-      /*       items: [
-        { icon: '', enTitle: 'home', znTitle: '日志' },
-        { icon: '', enTitle: 'category', znTitle: '分类' },
-        { icon: '', enTitle: 'about', znTitle: '关于' }
-      ] */
-    }
+    return {}
   }
 }
 </script>

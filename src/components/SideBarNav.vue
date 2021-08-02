@@ -2,19 +2,18 @@
   <div class='side-bar-nav'>
     <div class='top'>
       <div class='title'>
-        {{ title }}
+        {{ state.title }}
       </div>
       <div class='sub-title'>
-        {{ subTitle }}
+        {{ state.subTitle }}
       </div>
     </div>
     <div class='items'>
       <div class='item'
            v-for='(item, index) in items'
            :key='index'
-           :class='{selected:selected===item.enTitle,
-           manager:item.enTitle==="manager"&&!state.token_status}'
-           @click="selected = item.enTitle;
+           :class='{selected:state.currentPage===item.enTitle}'
+           @click="state.currentPage = item.enTitle;
            changePage()">{{ item.znTitle }}</div>
     </div>
   </div>
@@ -31,22 +30,19 @@ export default {
   },
   data: function () {
     return {
-      title: "Elcfin's Blog",
-      subTitle: '仲夏夜茫 七月未央',
       items: [
         { icon: '', enTitle: 'home', znTitle: '首页' },
         { icon: '', enTitle: 'about', znTitle: '关于' },
-        { icon: '', enTitle: 'category', znTitle: '分类' },
-        { icon: '', enTitle: 'article', znTitle: '归档' },
+        /*         { icon: '', enTitle: 'tag', znTitle: '标签' }, */
+        /*         { icon: '', enTitle: 'article', znTitle: '归档' }, */
         { icon: '', enTitle: 'login', znTitle: '登录' },
         { icon: '', enTitle: 'manager', znTitle: '管理' }
-      ],
-      selected: this.state.currentPage
+      ]
     }
   },
   methods: {
     changePage() {
-      this.$emit('changePage', this.selected)
+      this.$emit('changePage', this.state.currentPage)
     }
   }
 }
@@ -94,18 +90,15 @@ export default {
       height: 30px;
       font-size: 12px;
       cursor: pointer;
-      transition: color 0.6s, background-color 0.6s;
+      transition: background-color 0.6s;
 
       &:hover {
-        color: @font-color-light;
-        background-color: @dark;
-        transition: color 0.6s, background-color 0.6s;
+        background-color: @grey;
       }
     }
 
     .selected {
-      color: @font-color-light;
-      background-color: @dark;
+      background-color: @grey;
     }
 
     .manager {

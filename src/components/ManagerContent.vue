@@ -4,18 +4,20 @@
       <div class="page-title">
         <slot name="title"></slot>
       </div>
-      <div class="bar">
-        <div class="bar-title"
-             v-for="item in barTitles"
-             :class="{title:'title'===item.enTitle,
+      <slot name="bar">
+        <div class="bar">
+          <div class="bar-title"
+               v-for="item in barTitles"
+               :class="{title:'title'===item.enTitle,
              date:'date'===item.enTitle}"
-             :key="item.enTitle">{{item.znTitle}}</div>
-        <img class="icon"
-             v-for="(item,index) in icons"
-             :key="index"
-             :src="item.icon"
-             :alt="item.name">
-      </div>
+               :key="item.enTitle">{{item.znTitle}}</div>
+          <img class="icon"
+               v-for="(item,index) in icons"
+               :key="index"
+               :src="item.icon"
+               :alt="item.name">
+        </div>
+      </slot>
       <div class="items">
         <slot name="items"></slot>
       </div>
@@ -56,7 +58,7 @@ export default {
     margin-bottom: 20px;
     color: @font-color-dark;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .bar {

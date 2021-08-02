@@ -2,15 +2,23 @@
   <div class="wrap">
     <manager-content class="manager-content">
       <template v-slot:title>
+        标签
+      </template>
+      <template v-slot:bar>
+        <div class="null"></div>
+      </template>
+    </manager-content>
+    <manager-content class="manager-content">
+      <template v-slot:title>
         草稿
       </template>
       <template v-slot:items>
         <div class="items">
           <div class="item"
-               v-for="(item,index) in test"
+               v-for="(item,index) in drafts"
                :key="index">
             <div class="title">{{item.title}}</div>
-            <div class="date">{{item.date}}</div>
+            <div class="date">{{item.createTime}}</div>
             <img class="icon"
                  src="@/assets/editor.png"
                  alt="editor"
@@ -23,6 +31,7 @@
         </div>
       </template>
     </manager-content>
+    <manager-draft-paging @changeDraftPage="changeDraftPage"></manager-draft-paging>
     <manager-content class="manager-content">
       <template v-slot:title>
         发布
@@ -50,21 +59,45 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import ManagerContent from '@/components/ManagerContent.vue'
+import ManagerDraftPaging from '@/components/ManagerDraftPaging.vue'
+import { draftPaging as apiDraftPaging } from '@/api/'
 
 export default {
   name: 'Manager',
   components: {
-    ManagerContent
+    ManagerContent,
+    ManagerDraftPaging
+  },
+  setup() {
+    const state = inject('state')
+    return { state }
   },
   data: function () {
     return {
-      test: [
-        { title: '猫猫吃鱼', date: 1 },
-        { title: '猫猫', date: 2 },
-        { title: '猫猫小可爱', date: 3 }
-      ]
+      drafts: []
     }
+  },
+  methods: {
+    changeDraftPage: async function (currentDraftPage) {
+      const data = {
+        size: this.state.pagingSize,
+        page: currentDraftPage
+      }
+
+      const res = await apiDraftPaging(data)
+      this.drafts = res.data.drafts
+    }
+  },
+  async created() {
+    const data = {
+      size: this.state.pagingSize,
+      page: 1
+    }
+
+    const res = await apiDraftPaging(data)
+    this.drafts = res.data.drafts
   }
 }
 </script>
@@ -76,6 +109,10 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  .null {
+    display: none;
+  }
 
   .items {
     margin-top: 10px;

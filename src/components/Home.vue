@@ -1,20 +1,152 @@
 <template>
-  <div class='home'>
-    <Content></Content>
+  <div>
+    <div class="content">
+      <common-content class="common-content chart-wrap">
+        <img :src="state.chart"
+             alt="chart"
+             class="chart">
+      </common-content>
+      <common-content class="common-content"
+                      v-for="item in articles"
+                      :key="item">
+        <div class="common-content-top">
+          <div class="title">
+            {{item.title}}
+          </div>
+          <div class="create-time time">发表于 {{item.createTime}}</div>
+        </div>
+        <div class="abstract"
+             :v-if="item.abstract!==''">
+          <v-md-editor v-model="item.abstract"
+                       mode="preview"></v-md-editor>
+          <div class="shell"></div>
+        </div>
+      </common-content>
+    </div>
+
+    <home-paging @changeHomePage="changeHomePage"></home-paging>
   </div>
 </template>
 
 <script>
-import Content from '@/components/Content.vue'
+import { inject } from 'vue'
+import CommonContent from '@/components/CommonContent.vue'
+import HomePaging from '@/components/HomePaging.vue'
+import { paging as apiPaging } from '@/api/'
+
+const transformTime = (time) => {
+  const date = new Date(time)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  return `${year}年${month}月${day}日`
+}
 
 export default {
   name: 'Home',
-  components: { Content }
+  components: {
+    CommonContent,
+    HomePaging
+  },
+  setup() {
+    const state = inject('state')
+    return { state }
+  },
+  data: function () {
+    return {
+      articles: []
+    }
+  },
+  methods: {
+    changeHomePage: async function (currentHomePage) {
+      const data = {
+        size: this.state.pagingSize,
+        page: currentHomePage
+      }
+
+      const res = await apiPaging(data)
+      this.articles = res.data.articles
+
+      this.articles.forEach((article) => {
+        article.createTime = transformTime(article.createTime)
+      })
+    }
+  },
+  async created() {
+    const data = {
+      size: this.state.pagingSize,
+      page: 1
+    }
+
+    const res = await apiPaging(data)
+    this.articles = res.data.articles
+
+    this.articles.forEach((article) => {
+      article.createTime = transformTime(article.createTime)
+    })
+  }
 }
 </script>
 
 <style lang='less' scoped>
-.home {
-  width: 100%;
+@import '@/assets/style/base.less';
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .chart-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    transition: height 1.2s;
+  }
+
+  .chart-wrap:hover {
+    height: 480px;
+  }
+
+  .common-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0px;
+    overflow: hidden;
+
+    .common-content-top {
+      padding: 15px;
+      padding-bottom: 0;
+
+      .title {
+        padding: 10px;
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+      .time {
+        padding: 10px;
+        padding-bottom: 0;
+        font-size: 14px;
+        color: @font-color-grey;
+      }
+    }
+
+    .abstract {
+      position: relative;
+
+      .shell {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 10px;
+        cursor: default;
+        z-index: 1;
+      }
+    }
+  }
 }
 </style>

@@ -21,12 +21,6 @@ export default {
   data: function () {
     return {
       title: "Elcfin's Blog",
-      items: [
-        { icon: '', enTitle: 'Home', znTitle: '首页' },
-        { icon: '', enTitle: 'About', znTitle: '关于' },
-        { icon: '', enTitle: 'Category', znTitle: '分类' },
-        { icon: '', enTitle: 'Article', znTitle: '归档' }
-      ],
       isSideShow: false
     }
   },

@@ -9,6 +9,13 @@ instance.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = token;
   }
+  console.log(config.url + " loading");
+  console.log();
+  return config;
+});
+
+instance.interceptors.response.use((config) => {
+  console.log(config.config.url + " finished");
   return config;
 });
 

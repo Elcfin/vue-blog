@@ -1,21 +1,17 @@
 import { reactive } from "vue";
-import { current as apiCurrent } from "@/api";
+import about from "@/store/about";
 
 const currentPage = window.location.hash.slice(2);
 
-const token_status = async () => {
-  try {
-    await apiCurrent();
-    return true;
-  } catch (e) {
-    console.log(e);
-  }
-  return false;
-};
-
 const state = reactive({
+  author: "Elcfin",
+  title: "Elcfin's Blog",
+  subTitle: "仲夏夜茫 七月未央",
+  description: "",
+  about,
+  chart: require("@/assets/chart.jpg"),
+  pagingSize: 6,
   currentPage,
-  token_status,
 });
 
 export default state;

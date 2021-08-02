@@ -29,5 +29,7 @@ export default {
 <style lang='less' scoped>
 .side-bar {
   width: 220px;
+  height: 100vh;
+  overflow: auto;
 }
 </style>
