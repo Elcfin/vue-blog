@@ -23,11 +23,6 @@ const routes = [
     component: () => Promise.resolve(require("@/components/Tag.vue")),
   },
   {
-    path: "/article",
-    name: "article",
-    component: () => Promise.resolve(require("@/components/Article.vue")),
-  },
-  {
     path: "/login",
     name: "login",
     component: () => Promise.resolve(require("@/components/Login.vue")),
@@ -36,6 +31,21 @@ const routes = [
     path: "/manager",
     name: "manager",
     component: () => Promise.resolve(require("@/components/Manager.vue")),
+  },
+  {
+    path: "/article/:id",
+    name: "article",
+    component: () => Promise.resolve(require("@/components/Article.vue")),
+  },
+  {
+    path: "/write",
+    name: "write",
+    component: () => Promise.resolve(require("@/components/WriteArticle.vue")),
+  },
+  {
+    path: "/edit/:id",
+    name: "edit",
+    component: () => Promise.resolve(require("@/components/EditArticle.vue")),
   },
 ];
 

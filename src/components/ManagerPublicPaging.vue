@@ -3,10 +3,10 @@
     <div class="bar">
       <div class="btn"
            v-for="index in pageNumber"
-           :class="{current:index===currentDraftPage}"
+           :class="{current:index===currentPublicPage}"
            :key="index"
-           @click="currentDraftPage=index;
-           changeDraftPage()">{{index}}</div>
+           @click="currentPublicPage=index;
+           changePublicPage()">{{index}}</div>
     </div>
   </div>
 </template>
@@ -15,7 +15,7 @@
 import { inject } from 'vue'
 
 export default {
-  name: 'ManagerDraftPaging',
+  name: 'ManagerPublicPaging',
   props: {
     pageNumber: Number
   },
@@ -25,12 +25,12 @@ export default {
   },
   data: function () {
     return {
-      currentDraftPage: 1
+      currentPublicPage: 1
     }
   },
   methods: {
-    changeDraftPage: function () {
-      this.$emit('changeDraftPage', this.currentDraftPage)
+    changePublicPage: function () {
+      this.$emit('changePublicPage', this.currentPublicPage)
     }
   }
 }

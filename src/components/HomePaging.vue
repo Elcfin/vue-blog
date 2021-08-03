@@ -2,40 +2,30 @@
   <div>
     <div class="bar">
       <div class="btn"
-           v-for="item in btns"
-           :class="{current:item===currentHomePage}"
-           :key="item"
-           @click="currentHomePage=item;
-           changeHomePage()">{{item}}</div>
+           v-for="index in pageNumber"
+           :class="{current:index===currentHomePage}"
+           :key="index"
+           @click="currentHomePage=index;
+           changeHomePage()">{{index}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import { inject } from 'vue'
-import { getPageNumber as apiGetPageNumber } from '@/api/'
 
 export default {
   name: 'HomePaging',
+  props: {
+    pageNumber: Number
+  },
   setup() {
     const state = inject('state')
     return { state }
   },
   data: function () {
     return {
-      currentHomePage: 1,
-      btns: []
-    }
-  },
-  created: async function () {
-    const data = {
-      size: this.state.pagingSize
-    }
-    const res = await apiGetPageNumber(data)
-    const pageNumber = res.data.pageNumber
-
-    for (let i = 1; i <= pageNumber; i++) {
-      this.btns.push(i)
+      currentHomePage: 1
     }
   },
   methods: {

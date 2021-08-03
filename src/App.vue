@@ -5,8 +5,9 @@
     <side-bar class='side-bar'
               @changePage="changePage"></side-bar>
     <router-view class='content'
-                 @delete="deleteInfo"
-                 @editor="editorInfo"></router-view>
+                 @readArticle="readArticle"
+                 @editArticle="editArticle"
+                 @writeArticle="writeArticle"></router-view>
     <Footer class='footer'></Footer>
   </div>
 </template>
@@ -46,11 +47,14 @@ export default {
     }
   },
   methods: {
-    deleteInfo(item, status) {
-      item.status = status
+    readArticle(article) {
+      this.$router.push(`/article/${article._id}`)
     },
-    editorInfo(item, status) {
-      item.status = status
+    editArticle(article) {
+      this.$router.push(`/edit/${article._id}`)
+    },
+    writeArticle() {
+      this.$router.push(`/write`)
     }
   }
 }
@@ -59,7 +63,7 @@ export default {
 <style lang="less" scoped>
 .app {
   margin: auto;
-  width: 90vw;
+  width: 95vw;
 }
 
 .top-bar {
@@ -88,7 +92,7 @@ export default {
   }
 
   .top-bar {
-    top: -60px;
+    display: none;
   }
 
   .side-bar {

@@ -6,9 +6,11 @@
              alt="chart"
              class="chart">
       </common-content>
+      <home-tag-content @filterArticle="changeHomePage"></home-tag-content>
       <common-content class="common-content"
                       v-for="item in articles"
-                      :key="item">
+                      :key="item"
+                      @click="$emit('readArticle',item)">
         <div class="common-content-top">
           <div class="title">
             {{item.title}}
@@ -24,7 +26,8 @@
       </common-content>
     </div>
 
-    <home-paging @changeHomePage="changeHomePage"></home-paging>
+    <home-paging @changeHomePage="changeHomePage"
+                 :pageNumber="homePageNumber"></home-paging>
   </div>
 </template>
 
@@ -32,7 +35,12 @@
 import { inject } from 'vue'
 import CommonContent from '@/components/CommonContent.vue'
 import HomePaging from '@/components/HomePaging.vue'
-import { paging as apiPaging } from '@/api/'
+import HomeTagContent from '@/components/HomeTagContent.vue'
+import {
+  paging as apiPaging,
+  getPageNumber as apiGetPageNumber,
+  filterTags as apiFilterTags
+} from '@/api/'
 
 const transformTime = (time) => {
   const date = new Date(time)
@@ -47,7 +55,8 @@ export default {
   name: 'Home',
   components: {
     CommonContent,
-    HomePaging
+    HomePaging,
+    HomeTagContent
   },
   setup() {
     const state = inject('state')
@@ -55,36 +64,51 @@ export default {
   },
   data: function () {
     return {
-      articles: []
+      articles: [],
+      homePageNumber: 1
     }
   },
   methods: {
     changeHomePage: async function (currentHomePage) {
       const data = {
         size: this.state.pagingSize,
-        page: currentHomePage
+        page: currentHomePage,
+        tags: this.state.tagsChecked
       }
 
       const res = await apiPaging(data)
       this.articles = res.data.articles
 
+      if (this.articles.length) {
+        this.articles.forEach((article) => {
+          article.createTime = transformTime(article.createTime)
+        })
+      }
+
+      const numberResult = await apiGetPageNumber(data)
+      this.homePageNumber = numberResult.data.pageNumber
+    }
+  },
+  async created() {
+    await apiFilterTags()
+
+    const data = {
+      size: this.state.pagingSize,
+      tags: this.state.tagsChecked,
+      page: 1
+    }
+    const res = await apiPaging(data)
+    this.articles = res.data.articles
+
+    if (this.articles.length) {
       this.articles.forEach((article) => {
         article.createTime = transformTime(article.createTime)
       })
     }
-  },
-  async created() {
-    const data = {
-      size: this.state.pagingSize,
-      page: 1
-    }
 
-    const res = await apiPaging(data)
-    this.articles = res.data.articles
+    const numberResult = await apiGetPageNumber(data)
 
-    this.articles.forEach((article) => {
-      article.createTime = transformTime(article.createTime)
-    })
+    this.homePageNumber = numberResult.data.pageNumber
   }
 }
 </script>

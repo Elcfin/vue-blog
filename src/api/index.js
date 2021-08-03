@@ -63,6 +63,77 @@ const publicPaging = (data) => {
   });
 };
 
+const getTags = (data) => {
+  return instance({
+    url: "/tags/getTags",
+    data,
+    method: "GET",
+  });
+};
+
+const filterTags = () => {
+  return instance({
+    url: "/tags/filterTags",
+    method: "GET",
+  });
+};
+
+const filterHomeArticle = (data) => {
+  return instance({
+    url: "/articles/filterHomeArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const getArticle = (data) => {
+  return instance({
+    url: "/articles/getArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const deleteArticle = (data) => {
+  return instance({
+    url: "/articles/deleteArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const toDraftArticle = (data) => {
+  return instance({
+    url: "/articles/toDraftArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const toPublicArticle = (data) => {
+  return instance({
+    url: "/articles/toPublicArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const createArticle = (data) => {
+  return instance({
+    url: "/articles/createArticle",
+    data,
+    method: "POST",
+  });
+};
+
+const updateArticle = (data) => {
+  return instance({
+    url: "/articles/updateArticle",
+    data,
+    method: "POST",
+  });
+};
+
 export {
   login,
   current,
@@ -72,4 +143,13 @@ export {
   draftPaging,
   getPublicPageNumber,
   publicPaging,
+  getTags,
+  filterTags,
+  filterHomeArticle,
+  getArticle,
+  deleteArticle,
+  toDraftArticle,
+  toPublicArticle,
+  createArticle,
+  updateArticle,
 };

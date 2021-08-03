@@ -12,15 +12,21 @@
              date:'date'===item.enTitle}"
                :key="item.enTitle">{{item.znTitle}}</div>
           <img class="icon"
-               v-for="(item,index) in icons"
-               :key="index"
-               :src="item.icon"
-               :alt="item.name">
+               src="@/assets/editor.png"
+               alt="edit">
+          <img class="icon"
+               src="@/assets/editor.png"
+               alt="edit">
+          <img class="icon"
+               src="@/assets/editor.png"
+               alt="edit">
         </div>
       </slot>
       <div class="items">
         <slot name="items"></slot>
       </div>
+      <slot name="btns"></slot>
+      <slot name="tags"></slot>
     </common-content>
   </div>
 </template>
@@ -87,6 +93,10 @@ export default {
       visibility: hidden;
       height: 20px;
     }
+  }
+
+  .items {
+    margin-bottom: 20px;
   }
 }
 </style>
