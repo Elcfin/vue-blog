@@ -7,7 +7,7 @@
              class="chart">
       </common-content>
       <home-tag-content @filterArticle="changeHomePage"></home-tag-content>
-      <common-content class="common-content"
+      <common-content class="common-content article"
                       v-for="item in articles"
                       :key="item"
                       @click="$emit('readArticle',item)">
@@ -25,7 +25,6 @@
         </div>
       </common-content>
     </div>
-
     <home-paging @changeHomePage="changeHomePage"
                  :pageNumber="homePageNumber"></home-paging>
   </div>
@@ -36,6 +35,7 @@ import { inject } from 'vue'
 import CommonContent from '@/components/CommonContent.vue'
 import HomePaging from '@/components/HomePaging.vue'
 import HomeTagContent from '@/components/HomeTagContent.vue'
+
 import {
   paging as apiPaging,
   getPageNumber as apiGetPageNumber,
@@ -119,12 +119,12 @@ export default {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 15px;
 
   .chart-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 15px;
     height: 80px;
     transition: height 1.2s;
   }
@@ -133,11 +133,13 @@ export default {
     height: 480px;
   }
 
+  .article {
+    margin-top: 15px;
+  }
+
   .common-content {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    padding: 0px;
     overflow: hidden;
 
     .common-content-top {

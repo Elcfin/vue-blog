@@ -2,7 +2,7 @@
   <div>
     <div class="bar">
       <div class="btn"
-           v-for="index in pageNumber"
+           v-for="index in btnNumber"
            :class="{current:index===currentHomePage}"
            :key="index"
            @click="currentHomePage=index;
@@ -26,6 +26,11 @@ export default {
   data: function () {
     return {
       currentHomePage: 1
+    }
+  },
+  computed: {
+    btnNumber() {
+      return this.pageNumber === 1 ? 0 : this.pageNumber
     }
   },
   methods: {

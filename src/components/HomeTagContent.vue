@@ -20,6 +20,7 @@ import { getTags as apiGetTags } from '@/api/index'
 
 export default {
   name: 'HomeTagContent',
+  components: {},
   data: function () {
     return {
       tags: []

@@ -8,42 +8,26 @@
         {{ state.subTitle }}
       </div>
     </div>
-    <div class='items'>
-      <div class='item'
-           v-for='(item, index) in items'
-           :key='index'
-           :class='{selected:state.currentPage===item.enTitle}'
-           @click="state.currentPage = item.enTitle;
-           changePage()">{{ item.znTitle }}</div>
-    </div>
+    <side-bar-nav-items @changePage="changePage">
+    </side-bar-nav-items>
   </div>
 </template>
 
 <script>
 import { inject } from 'vue'
+import SideBarNavItems from '@/components/SideBarNavItems.vue'
 
 export default {
   name: 'SideBarNav',
-  setup() {
+  components: { SideBarNavItems },
+  setup(props, context) {
     const state = inject('state')
-    return { state }
-  },
-  data: function () {
-    return {
-      items: [
-        { icon: '', enTitle: 'home', znTitle: '首页' },
-        { icon: '', enTitle: 'about', znTitle: '关于' },
-        /*         { icon: '', enTitle: 'tag', znTitle: '标签' }, */
-        /*         { icon: '', enTitle: 'article', znTitle: '归档' }, */
-        { icon: '', enTitle: 'login', znTitle: '登录' },
-        { icon: '', enTitle: 'manager', znTitle: '管理' }
-      ]
+
+    const changePage = () => {
+      context.emit('changePage')
     }
-  },
-  methods: {
-    changePage() {
-      this.$emit('changePage', this.state.currentPage)
-    }
+
+    return { state, changePage }
   }
 }
 </script>
@@ -76,33 +60,6 @@ export default {
     .sub-title {
       height: 30px;
       font-size: 14px;
-    }
-  }
-
-  .items {
-    box-sizing: border-box;
-    padding: 10px 0;
-    color: @font-color-grey;
-    line-height: 30px;
-
-    .item {
-      padding: 0 20px;
-      height: 30px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: background-color 0.6s;
-
-      &:hover {
-        background-color: @grey;
-      }
-    }
-
-    .selected {
-      background-color: @grey;
-    }
-
-    .manager {
-      display: none;
     }
   }
 }

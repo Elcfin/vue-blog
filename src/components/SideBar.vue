@@ -1,11 +1,12 @@
 <template>
   <div>
     <div class='side-bar'>
-      <side-bar-nav @changePage="changePage"></side-bar-nav>
-      <side-bar-overview @changePage="changePage"></side-bar-overview>
+      <side-bar-nav @changePage="changePage">
+      </side-bar-nav>
+      <side-bar-overview @changePage="changePage">
+      </side-bar-overview>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -18,10 +19,12 @@ export default {
     SideBarNav,
     SideBarOverview
   },
-  methods: {
-    changePage(selected) {
-      this.$emit('changePage', selected)
+  setup(props, context) {
+    /* 切换路由界面 */
+    const changePage = (page) => {
+      context.emit('changePage', page)
     }
+    return { changePage }
   }
 }
 </script>
@@ -29,6 +32,7 @@ export default {
 <style lang='less' scoped>
 .side-bar {
   width: 220px;
+  /* 考虑侧边导航栏长度超出页面时滚动 */
   height: 100vh;
   overflow: auto;
 }

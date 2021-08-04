@@ -18,11 +18,6 @@ const routes = [
     component: () => Promise.resolve(require("@/components/About.vue")),
   },
   {
-    path: "/tag",
-    name: "tag",
-    component: () => Promise.resolve(require("@/components/Tag.vue")),
-  },
-  {
     path: "/login",
     name: "login",
     component: () => Promise.resolve(require("@/components/Login.vue")),

@@ -1,14 +1,24 @@
 <template>
-  <top-bar class='top-bar'
-           @changePage="changePage"></top-bar>
   <div class='app'>
+    <!-- 宽度较小时出现顶部导航栏 -->
+    <top-bar class='top-bar'
+             @changePage="changePage">
+    </top-bar>
+    <!-- 宽度较大时出现侧边导航栏 -->
     <side-bar class='side-bar'
-              @changePage="changePage"></side-bar>
-    <router-view class='content'
-                 @readArticle="readArticle"
-                 @editArticle="editArticle"
-                 @writeArticle="writeArticle"></router-view>
-    <Footer class='footer'></Footer>
+              @changePage="changePage">
+    </side-bar>
+    <!-- 路由页面 -->
+    <suspense>
+      <router-view class='content'
+                   @changePage="changePage"
+                   @readArticle="readArticle"
+                   @editArticle="editArticle"
+                   @writeArticle="changePage">
+      </router-view>
+    </suspense>
+    <!-- 页脚 -->
+    <page-footer class='footer'></page-footer>
   </div>
 </template>
 
@@ -19,42 +29,54 @@ import { state } from '@/store/'
 
 import TopBar from '@/components/TopBar.vue'
 import SideBar from '@/components/SideBar.vue'
-import Footer from '@/components/Footer.vue'
+import PageFooter from '@/components/PageFooter.vue'
 
+/* 切换路由页面 */
 const routerChange = () => {
   const router = useRouter()
-  const changePage = (selected) => {
+
+  const changePage = () => {
     router.push({
-      name: selected
+      name: state.currentPage
+    })
+    console.log(state.currentPage)
+  }
+
+  const readArticle = (article) => {
+    router.push({
+      name: 'article',
+      params: {
+        id: article._id
+      }
+    })
+  }
+
+  const editArticle = (article) => {
+    router.push({
+      name: 'edit',
+      params: {
+        id: article._id
+      }
     })
   }
 
   return {
-    changePage
+    changePage,
+    readArticle,
+    editArticle
   }
 }
 
 export default {
   name: 'App',
-  components: { SideBar, Footer, TopBar },
+  components: { TopBar, SideBar, PageFooter },
   setup() {
-    const { changePage } = routerChange()
-
+    const { changePage, readArticle, editArticle } = routerChange()
     provide('state', state)
-
     return {
-      changePage
-    }
-  },
-  methods: {
-    readArticle(article) {
-      this.$router.push(`/article/${article._id}`)
-    },
-    editArticle(article) {
-      this.$router.push(`/edit/${article._id}`)
-    },
-    writeArticle() {
-      this.$router.push(`/write`)
+      changePage,
+      readArticle,
+      editArticle
     }
   }
 }
@@ -78,16 +100,19 @@ export default {
 }
 
 .content {
+  /* 透明上边框 75px = 60px 顶部导航栏高度 + 15px */
   border-top: 75px solid transparent;
 }
 
 .footer {
+  /* 透明上边框 10px */
   border-top: 10px solid transparent;
 }
 
 @media (min-width: 980px) {
   .app {
     max-width: 1080px;
+    /* 使部分屏幕上垂直滚动条总是显示 */
     min-height: 720px;
   }
 
@@ -98,19 +123,22 @@ export default {
   .side-bar {
     display: block;
     position: fixed;
+    /* 透明上边框 10px */
     border-top: 10px solid transparent;
   }
 
   .content {
     box-sizing: border-box;
-    border-top: 0;
+    /* 透明上边框 10px */
     border-top: 10px solid transparent;
+    /* 透明左边框 235px = 220px 侧边导航栏宽度 + 15px */
     border-left: 235px solid transparent;
   }
 
   .footer {
+    /* 透明左边框 235px = 220px 侧边导航栏宽度 + 15px */
     border-left: 235px solid transparent;
   }
-} ;
+}
 </style>>
 

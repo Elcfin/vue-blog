@@ -1,17 +1,12 @@
 <template>
   <div class='footer'>
-    {{ content }}
+    © 2021 Elcfin
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Footer',
-  data: function () {
-    return {
-      content: '© 2021 Elcfin'
-    }
-  }
+  name: 'Footer'
 }
 </script>
 
@@ -20,8 +15,8 @@ export default {
 
 .footer {
   padding: 25px 0;
-  text-align: center;
   color: @font-color-grey;
   font-size: 12px;
+  text-align: center;
 }
 </style>

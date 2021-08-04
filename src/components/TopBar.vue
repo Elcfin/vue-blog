@@ -1,33 +1,35 @@
 <template>
   <div class='top-bar'>
     <div class="wrap">
-      <div class="title">{{ title }}</div>
-      <div class="more"
-           @click="isSideShow=!isSideShow"><img src="@/assets/more.png"
-             alt="more"></div>
+      <div class="title">{{ state.title }}</div>
+      <img src="@/assets/more.png"
+           alt="more"
+           class="more-img"
+           @click="isSideShow=!isSideShow">
     </div>
-    <top-bar-side class="top-bar-side"
-                  :class="{'side-show': isSideShow}"
-                  @changePage="changePage"></top-bar-side>
+    <top-bar-side :class="{'side-show': isSideShow}"
+                  @changePage="changePage">
+    </top-bar-side>
   </div>
 </template>
 
 <script>
+import { inject, ref } from 'vue'
 import TopBarSide from '@/components/TopBarSide.vue'
 
 export default {
   name: 'TopBar',
   components: { TopBarSide },
-  data: function () {
-    return {
-      title: "Elcfin's Blog",
-      isSideShow: false
+  setup(props, context) {
+    const state = inject('state')
+    const isSideShow = ref(false)
+
+    const changePage = () => {
+      console.log(state.currentPage)
+      context.emit('changePage')
     }
-  },
-  methods: {
-    changePage(selected) {
-      this.$emit('changePage', selected)
-    }
+
+    return { state, isSideShow, changePage }
   }
 }
 </script>
@@ -46,36 +48,20 @@ export default {
   z-index: 2;
 
   .wrap {
-    margin: auto;
+    margin: 0 auto;
     width: 90vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: @font-color-light;
 
-    .title {
-      color: @font-color-light;
+    .more-img {
+      width: 20px;
     }
-
-    .more {
-      img {
-        display: block;
-        margin-right: 0;
-        margin-left: auto;
-        width: 20px;
-      }
-    }
-  }
-
-  .top-bar-side {
-    position: absolute;
-    left: -220px;
-    top: 0;
-    transition: left 0.3s;
   }
 
   .side-show {
     left: 0;
-    transition: left 0.3s;
   }
 }
 </style>

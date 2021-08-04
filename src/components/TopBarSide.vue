@@ -3,7 +3,8 @@
     <div class="profile">
       <div class="profile-img">
         <img src="@/assets/leaf.jpg"
-             alt="profile">
+             alt="profile"
+             class="img">
       </div>
     </div>
     <div class="author">
@@ -14,30 +15,33 @@
     </div>
     <div class="navbar">
       <div class="item"
-           v-for="(item, index) in items"
-           :key="index"
-           @click="$emit('changePage',item.enTitle)">{{ item.znTitle }}</div>
+           v-for="item in items"
+           :key="item"
+           @click="changePage(item.enTitle)">
+        {{ item.znTitle }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject, reactive } from 'vue'
 
 export default {
   name: 'TopBarSide',
-  setup() {
+  setup(props, context) {
     const state = inject('state')
-    return { state }
-  },
-  data: function () {
-    return {
-      items: [
-        { icon: '', enTitle: 'home', znTitle: '日志' },
-        /*         { icon: '', enTitle: 'tag', znTitle: '标签' }, */
-        { icon: '', enTitle: 'about', znTitle: '关于' }
-      ]
+    const items = reactive([
+      { enTitle: 'home', znTitle: '日志' },
+      { enTitle: 'about', znTitle: '关于' }
+    ])
+
+    const changePage = (page) => {
+      state.currentPage = page
+      context.emit('changePage')
     }
+
+    return { state, items, changePage }
   }
 }
 </script>
@@ -48,24 +52,29 @@ export default {
 .top-bar-side {
   &:extend(.common-block);
 
+  position: absolute;
+  left: -220px;
+  top: 0;
   padding: 0 40px;
   height: 100vh;
   overflow: auto;
+  /* 覆盖原组件样式 */
   border-radius: 0;
+  transition: left 0.3s;
 
   .profile {
     padding: 20px 0 10px 0;
 
     .profile-img {
       box-sizing: border-box;
-      margin: auto;
+      margin: 0 auto;
       width: 120px;
       height: 120px;
       overflow: hidden;
       border: 6px double @grey;
       border-radius: 50%;
 
-      img {
+      .img {
         width: 100%;
       }
     }

@@ -1,8 +1,9 @@
 <template>
   <div class='side-bar-overview'>
     <div class="profile">
-      <div class="profile-img">
-        <img src="@/assets/leaf.jpg"
+      <div class="profile-img-wrap">
+        <img :src="state.profile"
+             class="profile-img"
              alt="profile">
       </div>
     </div>
@@ -12,12 +13,6 @@
     <div class="discription">
       {{ state.discription }}
     </div>
-    <!-- <div class="navbar">
-      <div class="item"
-           v-for="(item, index) in items"
-           :key="index"
-           @click="$emit('changePage',item.enTitle)">{{ item.znTitle }}</div>
-    </div> -->
   </div>
 </template>
 
@@ -29,9 +24,6 @@ export default {
   setup() {
     const state = inject('state')
     return { state }
-  },
-  data: function () {
-    return {}
   }
 }
 </script>
@@ -53,16 +45,16 @@ export default {
   .profile {
     padding-bottom: 10px;
 
-    .profile-img {
+    .profile-img-wrap {
       box-sizing: border-box;
-      margin: auto;
+      margin: 0 auto;
       width: 120px;
       height: 120px;
       overflow: hidden;
       border: 6px double @grey;
       border-radius: 50%;
 
-      img {
+      .profile-img {
         width: 100%;
       }
     }
@@ -76,24 +68,10 @@ export default {
   }
 
   .discription {
-    font-size: 12px;
     color: @font-color-grey;
+    font-size: 12px;
     text-align: center;
     line-height: 30px;
   }
-
-  /* .navbar {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    padding-bottom: 10px;
-    color: @font-color-grey;
-    font-size: 12px;
-
-    .item {
-      padding: 10px;
-      cursor: pointer;
-    }
-  } */
 }
 </style>

@@ -39,7 +39,7 @@
                  alt="toPublic"
                  @click="toPublic(item)">
             <img class="icon"
-                 src="@/assets/editor.png"
+                 src="@/assets/edit.png"
                  alt="edit"
                  @click="$emit('editArticle',item)">
             <img class="icon"
@@ -73,7 +73,7 @@
                  alt="toDraft"
                  @click="toDraft(item)">
             <img class="icon"
-                 src="@/assets/editor.png"
+                 src="@/assets/edit.png"
                  alt="edit"
                  @click="$emit('editArticle',item)">
             <img class="icon"

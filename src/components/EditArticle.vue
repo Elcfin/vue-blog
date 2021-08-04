@@ -1,9 +1,10 @@
 <template>
   <div>
     <common-content class="common-content">
-      <div class="input-wrap">
+      <div class="top-bar">
         <input type="text"
                placeholder="标题"
+               class="input"
                v-model="article.title" />
         <div class="save-wrap">
           <img src="@/assets/save.png"
@@ -11,63 +12,79 @@
                @click="updateArticle">
         </div>
       </div>
-      <div class="input-wrap">
-        <input type="text"
-               placeholder="标签"
-               v-model="article.tags" />
-      </div>
+      <input type="text"
+             placeholder="标签"
+             class="input"
+             v-model="article.tags" />
       <v-md-editor v-model="article.abstract"
                    height="200px"
-                   placeholder="摘要"></v-md-editor>
+                   placeholder="摘要">
+      </v-md-editor>
       <v-md-editor v-model="article.content"
                    height="600px"
-                   placeholder="正文"></v-md-editor>
-
+                   placeholder="正文">
+      </v-md-editor>
     </common-content>
-
   </div>
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useRoute } from 'vue-router'
 import CommonContent from '@/components/CommonContent.vue'
 import {
   getArticle as apiGetArticle,
   updateArticle as apiUpdateArticle,
   filterTags as apiFilterTags
 } from '@/api'
+import { awaitWraper, processApiError } from '@/utils'
+
+const getArticleData = async (data) => {
+  const res = await awaitWraper(apiGetArticle(data))
+  let article
+  if (res[0]) processApiError(res[0])
+  else {
+    article = res[1].data.article
+
+    if (article.tags.length) {
+      const tags = []
+      for (const tag of article.tags) tags.push(tag.name)
+      article.tags = JSON.stringify(tags)
+    } else article.tags = '[""]'
+  }
+  return article
+}
 
 export default {
-  name: 'WriteArticle',
+  name: 'EditArticle',
   components: { CommonContent },
-  data: function () {
-    return {
-      article: {
-        tags: '[""]'
+  async setup(props, context) {
+    const route = new useRoute()
+
+    /* 获取文章数据 */
+    const data = { id: route.params.id }
+    const articleInfo = await getArticleData(data)
+    const article = reactive(articleInfo)
+
+    /* 更新文章数据 */
+    const updateArticle = async () => {
+      const data = article
+      const res = await awaitWraper(apiUpdateArticle(data))
+
+      if (res[0]) processApiError(res[0])
+      else {
+        console.log('updateArticle success')
+
+        /* 更新后过滤，删去没有文章使用的标签 */
+        const filterRes = await awaitWraper(apiFilterTags())
+        if (filterRes[0]) processApiError(filterRes[0])
+        else console.log('filterTags success')
+
+        /* 保存成功后触发回到管理页面 */
+        context.emit('changePage', 'manager')
       }
     }
-  },
-  methods: {
-    updateArticle: async function () {
-      const data = this.article
-      await apiUpdateArticle(data)
-      await apiFilterTags()
-    }
-  },
-  async created() {
-    const data = {
-      id: this.$route.params.id
-    }
-    const articleRes = await apiGetArticle(data)
-    this.article = articleRes.data[0]
-
-    const tags = []
-    if (this.article.tags.length) {
-      for (const tag of this.article.tags) {
-        tags.push(tag.name)
-      }
-    }
-
-    this.article.tags = JSON.stringify(tags)
+    return { article, updateArticle }
   }
 }
 </script>
@@ -80,23 +97,10 @@ export default {
   flex-direction: column;
   gap: 10px;
 
-  .input-wrap {
+  .top-bar {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: Tahoma;
-
-    & > input[type='text'] {
-      box-sizing: border-box;
-      padding: 10px 20px;
-      width: 100%;
-
-      font-family: Tahoma;
-      font-size: 14px;
-      border: none;
-      background-color: @grey;
-      outline: none;
-    }
 
     .save-wrap {
       display: flex;
@@ -113,6 +117,17 @@ export default {
         background-color: @dark-grey;
       }
     }
+  }
+
+  .input {
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: 100%;
+    font-family: Tahoma;
+    font-size: 14px;
+    background-color: @grey;
+    border: none;
+    outline: none;
   }
 }
 </style>

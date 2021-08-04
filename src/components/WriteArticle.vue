@@ -1,10 +1,10 @@
 <template>
   <div>
-
     <common-content class="common-content">
-      <div class="input-wrap">
+      <div class="top-bar">
         <input type="text"
                placeholder="标题"
+               class="input"
                v-model="article.title" />
         <div class="save-wrap">
           <img src="@/assets/save.png"
@@ -12,43 +12,46 @@
                @click="createArticle">
         </div>
       </div>
-      <div class="input-wrap">
-        <input type="text"
-               placeholder="标签"
-               v-model="article.tags" />
-      </div>
+      <input type="text"
+             placeholder="标签"
+             class="input"
+             v-model="article.tags" />
       <v-md-editor v-model="article.abstract"
                    height="200px"
-                   placeholder="摘要"></v-md-editor>
+                   placeholder="摘要">
+      </v-md-editor>
       <v-md-editor v-model="article.content"
                    height="600px"
-                   placeholder="正文"></v-md-editor>
-
+                   placeholder="正文">
+      </v-md-editor>
     </common-content>
-
   </div>
 </template>
 
 <script>
+import { reactive } from 'vue'
 import CommonContent from '@/components/CommonContent.vue'
-import { createArticle } from '@/api'
+import { createArticle as apiCreateArticle } from '@/api'
+import { awaitWraper, processApiError } from '@/utils'
 
 export default {
   name: 'WriteArticle',
   components: { CommonContent },
-  data: function () {
-    return {
-      article: {
-        tags: '[""]'
+  setup(props, context) {
+    const article = reactive({ tags: '[""]' })
+
+    /* 创建新文章 */
+    const createArticle = async () => {
+      const data = article
+      const res = await awaitWraper(apiCreateArticle(data))
+      if (res[0]) processApiError(res[0])
+      else {
+        console.log('create success')
+        /* 保存成功后触发回到管理页面 */
+        context.emit('changePage', 'manager')
       }
     }
-  },
-  methods: {
-    createArticle: async function () {
-      const data = this.article
-      /* 可以加个防抖 */
-      await createArticle(data)
-    }
+    return { article, createArticle }
   }
 }
 </script>
@@ -61,23 +64,10 @@ export default {
   flex-direction: column;
   gap: 10px;
 
-  .input-wrap {
+  .top-bar {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: Tahoma;
-
-    & > input[type='text'] {
-      box-sizing: border-box;
-      padding: 10px 20px;
-      width: 100%;
-
-      font-family: Tahoma;
-      font-size: 14px;
-      border: none;
-      background-color: @grey;
-      outline: none;
-    }
 
     .save-wrap {
       display: flex;
@@ -94,6 +84,17 @@ export default {
         background-color: @dark-grey;
       }
     }
+  }
+
+  .input {
+    box-sizing: border-box;
+    padding: 10px 20px;
+    width: 100%;
+    font-family: Tahoma;
+    font-size: 14px;
+    background-color: @grey;
+    border: none;
+    outline: none;
   }
 }
 </style>

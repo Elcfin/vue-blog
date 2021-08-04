@@ -1,34 +1,40 @@
 <template>
   <div class="wrap">
     <div class="btn"
-         @click="login"></div>
+         @click="login">
+    </div>
     <div class="input-wrap">
       <input type="password"
              placeholder="password"
+             class="input"
              v-model="password" />
-      <!-- <span class="notes">password</span> -->
     </div>
     <div class="btn"
-         @click="logout"></div>
+         @click="logout">
+    </div>
   </div>
 </template>
 
 <script>
+import { ref } from 'vue'
+
 export default {
   name: 'LoginInput',
-  data: function () {
-    return {
-      password: ''
+  setup(props, context) {
+    const password = ref('')
+
+    /* 登录 */
+    const login = () => {
+      context.emit('login', password.value)
+      password.value = ''
     }
-  },
-  methods: {
-    login: function () {
-      this.$emit('login', this.password)
-      this.password = ''
-    },
-    logout: function () {
-      this.$emit('logout')
+
+    /* 登出 */
+    const logout = () => {
+      context.emit('logout')
     }
+
+    return { password, login, logout }
   }
 }
 </script>
@@ -38,38 +44,38 @@ export default {
 
 .wrap {
   display: flex;
-  align-items: center;
   gap: 10px;
+  margin: 20px 0;
 
   .input-wrap {
     box-sizing: border-box;
     flex: 1;
-    margin: 20px 0;
     height: 48px;
     font-family: Tahoma;
     border: 2px double @dark;
     border-radius: 20px;
+    overflow: hidden;
+    transition: border 0.6s;
 
-    & > input[type='password'] {
+    .input {
       box-sizing: border-box;
-      /*     flex: 1; */
       padding: 0 20px;
       width: 100%;
       height: 44px;
       font-family: Tahoma;
       font-size: 16px;
       border: none;
-      background: transparent;
       outline: none;
     }
   }
 
+  .input-wrap:hover {
+    border: 2px double @dark-grey;
+  }
+
   .btn {
     box-sizing: border-box;
-    margin: 20px 0;
     width: 24px;
-    height: 48px;
-    color: @font-color-light;
     background-color: @dark;
     border-radius: 6px;
     cursor: pointer;
@@ -77,7 +83,7 @@ export default {
   }
 
   .btn:hover {
-    background-color: @grey;
+    background-color: @dark-grey;
   }
 }
 </style>

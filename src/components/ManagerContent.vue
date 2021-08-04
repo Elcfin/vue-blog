@@ -12,13 +12,13 @@
              date:'date'===item.enTitle}"
                :key="item.enTitle">{{item.znTitle}}</div>
           <img class="icon"
-               src="@/assets/editor.png"
+               src="@/assets/edit.png"
                alt="edit">
           <img class="icon"
-               src="@/assets/editor.png"
+               src="@/assets/edit.png"
                alt="edit">
           <img class="icon"
-               src="@/assets/editor.png"
+               src="@/assets/edit.png"
                alt="edit">
         </div>
       </slot>
@@ -44,10 +44,6 @@ export default {
       barTitles: [
         { enTitle: 'title', znTitle: '标题' },
         { enTitle: 'date', znTitle: '日期' }
-      ],
-      icons: [
-        { icon: require('../assets/editor.png'), name: 'editor' },
-        { icon: require('../assets/delete.png'), name: 'delete' }
       ]
     }
   }
