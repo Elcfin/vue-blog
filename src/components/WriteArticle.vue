@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, inject } from 'vue'
 import CommonContent from '@/components/CommonContent.vue'
 import { createArticle as apiCreateArticle } from '@/api'
 import { awaitWraper, processApiError } from '@/utils'
@@ -39,7 +39,7 @@ export default {
   components: { CommonContent },
   setup(props, context) {
     const article = reactive({ tags: '[""]' })
-
+    const state = inject('state')
     /* 创建新文章 */
     const createArticle = async () => {
       const data = article
@@ -47,8 +47,9 @@ export default {
       if (res[0]) processApiError(res[0])
       else {
         console.log('create success')
+        state.currentPage = 'manager'
         /* 保存成功后触发回到管理页面 */
-        context.emit('changePage', 'manager')
+        context.emit('changePage')
       }
     }
     return { article, createArticle }
@@ -78,10 +79,10 @@ export default {
         height: 30px;
         cursor: pointer;
         transition: background-color 0.6s;
-      }
 
-      .save:hover {
-        background-color: @dark-grey;
+        &:hover {
+          background-color: @dark-grey;
+        }
       }
     }
   }

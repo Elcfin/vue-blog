@@ -1,3 +1,4 @@
+/* 处理请求或响应错误 */
 const processApiError = (err) => {
   if (err.response) {
     // The request was made and the server responded with a status code

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { reactive, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import CommonContent from '@/components/CommonContent.vue'
 import {
@@ -69,6 +69,7 @@ export default {
     /* 更新文章数据 */
     const updateArticle = async () => {
       const data = article
+      const state = inject('state')
       const res = await awaitWraper(apiUpdateArticle(data))
 
       if (res[0]) processApiError(res[0])
@@ -81,7 +82,8 @@ export default {
         else console.log('filterTags success')
 
         /* 保存成功后触发回到管理页面 */
-        context.emit('changePage', 'manager')
+        state.currentPage = 'manager'
+        context.emit('changePage')
       }
     }
     return { article, updateArticle }
@@ -111,10 +113,10 @@ export default {
         height: 30px;
         cursor: pointer;
         transition: background-color 0.6s;
-      }
 
-      .save:hover {
-        background-color: @dark-grey;
+        &:hover {
+          background-color: @dark-grey;
+        }
       }
     }
   }

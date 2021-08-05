@@ -14,7 +14,7 @@ import {
   createArticle,
   updateArticle,
 } from "./articles";
-import { getTags, filterTags } from "./tags";
+import { getTags, filterTags, getPublicTags } from "./tags";
 
 export {
   login,
@@ -34,4 +34,5 @@ export {
   toPublicArticle,
   createArticle,
   updateArticle,
+  getPublicTags,
 };

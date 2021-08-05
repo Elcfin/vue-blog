@@ -10,8 +10,8 @@
     <div class="author">
       {{ state.author }}
     </div>
-    <div class="discription">
-      {{ state.discription }}
+    <div class="description">
+      {{ state.description }}
     </div>
     <div class="navbar">
       <div class="item"
@@ -87,7 +87,7 @@ export default {
     line-height: 30px;
   }
 
-  .discription {
+  .description {
     font-size: 14px;
     color: @font-color-grey;
     text-align: center;

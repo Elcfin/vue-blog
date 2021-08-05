@@ -3,35 +3,30 @@
     <div class="bar">
       <div class="btn"
            v-for="index in pageNumber"
-           :class="{current:index===currentDraftPage}"
+           :class="{current:index===currentPage}"
            :key="index"
-           @click="currentDraftPage=index;
-           changeDraftPage()">{{index}}</div>
+           @click="changeManagerPage(index)">
+        {{index}}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { inject } from 'vue'
+import { ref } from 'vue'
 
 export default {
-  name: 'ManagerDraftPaging',
+  name: 'ManagerPaging',
   props: {
     pageNumber: Number
   },
-  setup() {
-    const state = inject('state')
-    return { state }
-  },
-  data: function () {
-    return {
-      currentDraftPage: 1
+  setup(props, context) {
+    const currentPage = ref(1)
+    const changeManagerPage = (index) => {
+      currentPage.value = index
+      context.emit('changeManagerPage', index)
     }
-  },
-  methods: {
-    changeDraftPage: function () {
-      this.$emit('changeDraftPage', this.currentDraftPage)
-    }
+    return { currentPage, changeManagerPage }
   }
 }
 </script>
@@ -44,20 +39,18 @@ export default {
   justify-content: flex-start;
   gap: 10px;
   height: 30px;
-  color: @font-color-dark;
   line-height: 30px;
 
   .btn {
     padding: 0 10px;
-    color: @font-color-dark;
     background-color: @light;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.6s;
-  }
 
-  .btn:hover {
-    background-color: @dark-grey;
+    &:hover {
+      background-color: @dark-grey;
+    }
   }
 
   .current {

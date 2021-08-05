@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="tags">
-      <div v-for="item in tags"
-           :key="item"
-           class="tag-wrap">
-        <div class="delete"></div>
-        <div class="tag"> {{item.name}}</div>
+  <div class="tags">
+    <div v-for="tag in tags"
+         :key="tag"
+         class="tag-wrap">
+      <div class="todo"></div>
+      <div class="tag">
+        {{tag.name}}
       </div>
     </div>
   </div>
@@ -25,29 +25,24 @@ export default {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  color: @font-color-grey;
 
   .tag-wrap {
     display: flex;
+    background-color: @grey;
+    height: 30px;
+    line-height: 30px;
 
     .tag {
-      display: flex;
-      align-items: center;
-
       padding: 0 10px;
-      height: 30px;
-      color: @font-color-grey;
-      line-height: 30px;
-      background-color: @grey;
       border-right: 1px solid @dark-grey;
     }
 
-    .delete {
+    .todo {
       width: 10px;
-      height: 30px;
       background-color: @dark-grey;
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px;
-      transition: background-color 0.6s;
     }
   }
 }

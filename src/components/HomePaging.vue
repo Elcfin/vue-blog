@@ -1,42 +1,33 @@
 <template>
-  <div>
-    <div class="bar">
-      <div class="btn"
-           v-for="index in btnNumber"
-           :class="{current:index===currentHomePage}"
-           :key="index"
-           @click="currentHomePage=index;
-           changeHomePage()">{{index}}</div>
+  <div class="bar">
+    <div class="btn"
+         v-for="index in btnNumber"
+         :class="{current:index===currentPage}"
+         :key="index"
+         @click="changeHomePage(index)">
+      {{index}}
     </div>
   </div>
 </template>
 
 <script>
-import { inject } from 'vue'
+import { ref, computed } from 'vue'
 
 export default {
   name: 'HomePaging',
   props: {
     pageNumber: Number
   },
-  setup() {
-    const state = inject('state')
-    return { state }
-  },
-  data: function () {
-    return {
-      currentHomePage: 1
+  setup(props, context) {
+    const currentPage = ref(1)
+    const btnNumber = computed(() =>
+      props.pageNumber === 1 ? 0 : props.pageNumber
+    )
+    const changeHomePage = (index) => {
+      currentPage.value = index
+      context.emit('changeHomePage', index)
     }
-  },
-  computed: {
-    btnNumber() {
-      return this.pageNumber === 1 ? 0 : this.pageNumber
-    }
-  },
-  methods: {
-    changeHomePage: function () {
-      this.$emit('changeHomePage', this.currentHomePage)
-    }
+    return { currentPage, btnNumber, changeHomePage }
   }
 }
 </script>
@@ -56,16 +47,15 @@ export default {
     &:extend(.common-block);
 
     padding: 0 10px;
-    color: @font-color-dark;
     background-color: @light;
     border-radius: 3px;
     cursor: pointer;
     transition: color 0.6s, background-color 0.6s;
-  }
 
-  .btn:hover {
-    color: @font-color-light;
-    background-color: @dark;
+    &:hover {
+      color: @font-color-light;
+      background-color: @dark;
+    }
   }
 
   .current {

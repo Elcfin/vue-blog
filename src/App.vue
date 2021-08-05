@@ -12,8 +12,8 @@
     <suspense>
       <router-view class='content'
                    @changePage="changePage"
-                   @readArticle="readArticle"
-                   @editArticle="editArticle"
+                   @readArticle="toArticle"
+                   @editArticle="toArticle"
                    @writeArticle="changePage">
       </router-view>
     </suspense>
@@ -35,6 +35,7 @@ import PageFooter from '@/components/PageFooter.vue'
 const routerChange = () => {
   const router = useRouter()
 
+  /* 通过 state.currentPage 获取要切换的页面 */
   const changePage = () => {
     router.push({
       name: state.currentPage
@@ -42,18 +43,9 @@ const routerChange = () => {
     console.log(state.currentPage)
   }
 
-  const readArticle = (article) => {
+  const toArticle = (article) => {
     router.push({
-      name: 'article',
-      params: {
-        id: article._id
-      }
-    })
-  }
-
-  const editArticle = (article) => {
-    router.push({
-      name: 'edit',
+      name: state.currentPage,
       params: {
         id: article._id
       }
@@ -62,8 +54,7 @@ const routerChange = () => {
 
   return {
     changePage,
-    readArticle,
-    editArticle
+    toArticle
   }
 }
 
@@ -71,12 +62,11 @@ export default {
   name: 'App',
   components: { TopBar, SideBar, PageFooter },
   setup() {
-    const { changePage, readArticle, editArticle } = routerChange()
+    const { changePage, toArticle } = routerChange()
     provide('state', state)
     return {
       changePage,
-      readArticle,
-      editArticle
+      toArticle
     }
   }
 }

@@ -28,14 +28,14 @@ const routes = [
     component: () => Promise.resolve(require("@/components/Manager.vue")),
   },
   {
-    path: "/article/:id",
-    name: "article",
-    component: () => Promise.resolve(require("@/components/Article.vue")),
-  },
-  {
     path: "/write",
     name: "write",
     component: () => Promise.resolve(require("@/components/WriteArticle.vue")),
+  },
+  {
+    path: "/article/:id",
+    name: "article",
+    component: () => Promise.resolve(require("@/components/Article.vue")),
   },
   {
     path: "/edit/:id",
@@ -49,6 +49,7 @@ const router = createRouter({
   routes,
 });
 
+/* 全局路由守卫 */
 router.beforeEach(async (to, from, next) => {
   const isToken = await hasToken();
 

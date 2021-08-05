@@ -1,178 +1,89 @@
 <template>
   <div>
-    <div class="content">
-      <common-content class="common-content chart-wrap">
-        <img :src="state.chart"
-             alt="chart"
-             class="chart">
-      </common-content>
-      <home-tag-content @filterArticle="changeHomePage"></home-tag-content>
-      <common-content class="common-content article"
-                      v-for="item in articles"
-                      :key="item"
-                      @click="$emit('readArticle',item)">
-        <div class="common-content-top">
-          <div class="title">
-            {{item.title}}
-          </div>
-          <div class="create-time time">发表于 {{item.createTime}}</div>
-        </div>
-        <div class="abstract"
-             :v-if="item.abstract!==''">
-          <v-md-editor v-model="item.abstract"
-                       mode="preview"></v-md-editor>
-          <div class="shell"></div>
-        </div>
-      </common-content>
+    <div>
+      <home-chart></home-chart>
+      <home-tag @filterArticle="filterArticle"></home-tag>
+      <home-article v-for="article in info.articles"
+                    :article="article"
+                    :key="article._id"
+                    @readArticle="readArticle"></home-article>
     </div>
-    <home-paging @changeHomePage="changeHomePage"
+    <home-paging @changeHomePage="filterArticle"
                  :pageNumber="homePageNumber"></home-paging>
   </div>
 </template>
 
 <script>
-import { inject } from 'vue'
-import CommonContent from '@/components/CommonContent.vue'
+import { inject, provide, reactive, ref } from 'vue'
 import HomePaging from '@/components/HomePaging.vue'
-import HomeTagContent from '@/components/HomeTagContent.vue'
+import HomeTag from '@/components/HomeTag.vue'
+import HomeArticle from '@/components/HomeArticle.vue'
+import HomeChart from '@/components/HomeChart.vue'
+import { transformTime, awaitWraper, processApiError } from '@/utils'
 
-import {
-  paging as apiPaging,
-  getPageNumber as apiGetPageNumber,
-  filterTags as apiFilterTags
-} from '@/api/'
+import { paging as apiPaging, getPageNumber as apiGetPageNumber } from '@/api/'
 
-const transformTime = (time) => {
-  const date = new Date(time)
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+const getArticles = async (data) => {
+  const res = await awaitWraper(apiPaging(data))
+  let articles = []
+  if (res[0]) processApiError(res[0])
+  else articles = res[1].data.articles
+  articles.forEach((article) => {
+    article.createTime = transformTime(article.createTime)
+  })
+  return articles
+}
 
-  return `${year}年${month}月${day}日`
+const getPageNumber = async (data) => {
+  const res = await awaitWraper(apiGetPageNumber(data))
+  let homePageNumber = 1
+  if (res[0]) processApiError(res[0])
+  else homePageNumber = res[1].data.pageNumber
+
+  return homePageNumber
 }
 
 export default {
   name: 'Home',
   components: {
-    CommonContent,
     HomePaging,
-    HomeTagContent
+    HomeTag,
+    HomeChart,
+    HomeArticle
   },
-  setup() {
+  async setup(props, context) {
     const state = inject('state')
-    return { state }
-  },
-  data: function () {
-    return {
-      articles: [],
-      homePageNumber: 1
+    const tagsChecked = reactive([])
+    provide('tagsChecked', tagsChecked)
+    const readArticle = (article) => {
+      context.emit('readArticle', article)
     }
-  },
-  methods: {
-    changeHomePage: async function (currentHomePage) {
+
+    const info = reactive({})
+    const homePageNumber = ref(1)
+    const filterArticle = async (currentPage = 1) => {
       const data = {
-        size: this.state.pagingSize,
-        page: currentHomePage,
-        tags: this.state.tagsChecked
+        size: state.pagingSize,
+        page: currentPage,
+        tags: tagsChecked
       }
-
-      const res = await apiPaging(data)
-      this.articles = res.data.articles
-
-      if (this.articles.length) {
-        this.articles.forEach((article) => {
-          article.createTime = transformTime(article.createTime)
-        })
-      }
-
-      const numberResult = await apiGetPageNumber(data)
-      this.homePageNumber = numberResult.data.pageNumber
-    }
-  },
-  async created() {
-    await apiFilterTags()
-
-    const data = {
-      size: this.state.pagingSize,
-      tags: this.state.tagsChecked,
-      page: 1
-    }
-    const res = await apiPaging(data)
-    this.articles = res.data.articles
-
-    if (this.articles.length) {
-      this.articles.forEach((article) => {
-        article.createTime = transformTime(article.createTime)
-      })
+      info.articles = reactive(await getArticles(data))
+      homePageNumber.value = await getPageNumber(data)
     }
 
-    const numberResult = await apiGetPageNumber(data)
+    await filterArticle()
 
-    this.homePageNumber = numberResult.data.pageNumber
+    return {
+      state,
+      tagsChecked,
+      readArticle,
+      filterArticle,
+      info,
+      homePageNumber
+    }
   }
 }
 </script>
 
 <style lang='less' scoped>
-@import '@/assets/style/base.less';
-
-.content {
-  display: flex;
-  flex-direction: column;
-
-  .chart-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-    height: 80px;
-    transition: height 1.2s;
-  }
-
-  .chart-wrap:hover {
-    height: 480px;
-  }
-
-  .article {
-    margin-top: 15px;
-  }
-
-  .common-content {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    .common-content-top {
-      padding: 15px;
-      padding-bottom: 0;
-
-      .title {
-        padding: 10px;
-        font-weight: bold;
-        font-size: 20px;
-      }
-
-      .time {
-        padding: 10px;
-        padding-bottom: 0;
-        font-size: 14px;
-        color: @font-color-grey;
-      }
-    }
-
-    .abstract {
-      position: relative;
-
-      .shell {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 10px;
-        cursor: default;
-        z-index: 1;
-      }
-    }
-  }
-}
 </style>

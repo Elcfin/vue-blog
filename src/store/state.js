@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import about from "@/store/about";
+import about from "./about";
 
 const currentPage = window.location.hash.slice(2);
 
@@ -8,11 +8,10 @@ const state = reactive({
   subTitle: "仲夏夜茫 七月未央",
   author: "Elcfin",
   profile: require("@/assets/leaf.jpg"),
-  description: "",
+  description: "简介",
   about,
   chart: require("@/assets/chart.jpg"),
-  pagingSize: 10,
-  tagsChecked: [],
+  pagingSize: 8,
   currentPage,
 });
 

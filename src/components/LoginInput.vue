@@ -67,10 +67,10 @@ export default {
       border: none;
       outline: none;
     }
-  }
 
-  .input-wrap:hover {
-    border: 2px double @dark-grey;
+    &:hover {
+      border: 2px double @dark-grey;
+    }
   }
 
   .btn {
@@ -80,10 +80,10 @@ export default {
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.6s;
-  }
 
-  .btn:hover {
-    background-color: @dark-grey;
+    &:hover {
+      background-color: @dark-grey;
+    }
   }
 }
 </style>

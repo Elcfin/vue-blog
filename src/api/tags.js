@@ -8,4 +8,8 @@ const getTags = () => {
   return getRequest("/tags/getTags");
 };
 
-export { getTags, filterTags };
+const getPublicTags = () => {
+  return getRequest("/tags/getPublicTags");
+};
+
+export { getTags, filterTags, getPublicTags };
