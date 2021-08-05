@@ -11,7 +11,7 @@ const state = reactive({
   description: "简介",
   about,
   chart: require("@/assets/chart.jpg"),
-  pagingSize: 8,
+  pagingSize: 6,
   currentPage,
 });
 

@@ -24,10 +24,6 @@ const publicPaging = (data) => {
   return postRequest("/articles/publicPaging", data);
 };
 
-const filterHomeArticle = (data) => {
-  return postRequest("/articles/filterHomeArticle", data);
-};
-
 const getArticle = (data) => {
   return postRequest("/articles/getArticle", data);
 };
@@ -59,7 +55,6 @@ export {
   draftPaging,
   getPublicPageNumber,
   publicPaging,
-  filterHomeArticle,
   getArticle,
   deleteArticle,
   toDraftArticle,

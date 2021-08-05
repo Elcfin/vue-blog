@@ -59,6 +59,7 @@ export default {
   name: 'EditArticle',
   components: { CommonContent },
   async setup(props, context) {
+    const state = inject('state')
     const route = new useRoute()
 
     /* 获取文章数据 */
@@ -69,7 +70,6 @@ export default {
     /* 更新文章数据 */
     const updateArticle = async () => {
       const data = article
-      const state = inject('state')
       const res = await awaitWraper(apiUpdateArticle(data))
 
       if (res[0]) processApiError(res[0])
