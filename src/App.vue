@@ -108,7 +108,8 @@ export default {
   box-sizing: border-box;
   position: absolute;
   margin-top: -50px;
-  width: 100%;
+  /* 与 app width: 95vw 一致*/
+  width: 95%;
   height: 50px;
 }
 
