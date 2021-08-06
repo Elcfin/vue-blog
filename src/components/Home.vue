@@ -10,13 +10,16 @@
                     :key="article._id"
                     @readArticle="readArticle"></home-article>
     </div>
-    <home-paging @changeHomePage="filterArticle"
-                 :pageNumber="homePageNumber"></home-paging>
+    <transition>
+      <home-paging @changeHomePage="filterArticle"
+                   :pageNumber="homePageNumber"
+                   v-show="isPagingShow"></home-paging>
+    </transition>
   </div>
 </template>
 
 <script>
-import { inject, provide, reactive, ref } from 'vue'
+import { inject, provide, reactive, ref, computed } from 'vue'
 import HomePaging from '@/components/HomePaging.vue'
 import HomeTag from '@/components/HomeTag.vue'
 import HomeArticle from '@/components/HomeArticle.vue'
@@ -55,6 +58,7 @@ export default {
   },
   async setup(props, context) {
     const state = inject('state')
+
     const tagsChecked = reactive([])
     provide('tagsChecked', tagsChecked)
     const readArticle = (article) => {
@@ -74,6 +78,7 @@ export default {
     }
 
     await filterArticle()
+    const isPagingShow = computed(() => homePageNumber.value > 1)
 
     return {
       state,
@@ -81,7 +86,8 @@ export default {
       readArticle,
       filterArticle,
       info,
-      homePageNumber
+      homePageNumber,
+      isPagingShow
     }
   }
 }

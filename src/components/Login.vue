@@ -1,6 +1,6 @@
 <template>
-  <!-- 正常情况下不会在宽度较小的页面出现 -->
   <div>
+    <!-- 正常情况下不会在宽度较小的页面出现 -->
     <common-content class="common-content">
       <div class="title">Login</div>
       <login-input @login="login"
@@ -57,3 +57,4 @@ export default {
   }
 }
 </style>
+

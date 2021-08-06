@@ -20,9 +20,7 @@ export default {
   },
   setup(props, context) {
     const currentPage = ref(1)
-    const btnNumber = computed(() =>
-      props.pageNumber === 1 ? 0 : props.pageNumber
-    )
+    const btnNumber = computed(() => props.pageNumber)
     const changeHomePage = (index) => {
       currentPage.value = index
       context.emit('changeHomePage', index)

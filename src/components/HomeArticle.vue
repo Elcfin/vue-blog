@@ -1,4 +1,5 @@
 <template>
+
   <common-content class="article"
                   @click="readArticle">
     <div class="article-top">
@@ -16,6 +17,7 @@
       <div class="shell"></div>
     </div>
   </common-content>
+
 </template>
 
 <script>

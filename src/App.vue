@@ -9,20 +9,21 @@
               @changePage="changePage">
     </side-bar>
     <!-- 路由页面 -->
-    <suspense>
-      <router-view class='content'
-                   v-slot="{ Component }"
-                   @changePage="changePage"
-                   @readArticle="toArticle"
-                   @editArticle="toArticle"
-                   @writeArticle="changePage">
-        <!-- 路由跳转动画 -->
-        <transition name="content"
-                    mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </suspense>
+    <div class='content'>
+      <suspense>
+        <router-view v-slot="{ Component }"
+                     @changePage="changePage"
+                     @readArticle="toArticle"
+                     @editArticle="toArticle"
+                     @writeArticle="changePage">
+          <!-- 路由跳转动画 -->
+          <transition name="content"
+                      mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </suspense>
+    </div>
     <!-- 页脚 -->
     <page-footer class='page-footer'></page-footer>
   </div>
@@ -82,7 +83,6 @@ export default {
 <style lang="less" scoped>
 .app {
   margin: auto;
-  min-height: 110vh;
   width: 95vw;
 }
 
@@ -101,15 +101,19 @@ export default {
   min-height: 110vh;
   /* 透明上边框 75px = 60px 顶部导航栏高度 + 15px */
   border-top: 75px solid transparent;
-  padding-bottom: 60px; /* >= footer高度，避免被覆盖 */
+  /* >= footer高度，避免被覆盖 */
+  padding-bottom: 60px;
 }
 
 .page-footer {
   box-sizing: border-box;
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: -50px;
-  /* 与 app width: 95vw 一致*/
-  width: 95%;
+  /* app  width: 95vw */
+  width: 95vw;
   height: 50px;
 }
 
