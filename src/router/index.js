@@ -51,12 +51,14 @@ const router = createRouter({
 
 /* 全局路由守卫 */
 router.beforeEach(async (to, from, next) => {
-  const isToken = await hasToken();
-
-  if (to.name === "manager" && !isToken) {
-    next({ name: "login" });
-    state.currentPage = "login";
-  } else next();
+  if (to.name === "manager") {
+    const isToken = await hasToken();
+    if (!isToken) {
+      state.currentPage = "login";
+      return next({ name: "login" });
+    }
+  }
+  next();
 });
 
 export default router;

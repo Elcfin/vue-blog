@@ -2,7 +2,9 @@
   <div>
     <div>
       <home-chart></home-chart>
-      <home-tag @filterArticle="filterArticle"></home-tag>
+      <suspense>
+        <home-tag @filterArticle="filterArticle"></home-tag>
+      </suspense>
       <home-article v-for="article in info.articles"
                     :article="article"
                     :key="article._id"

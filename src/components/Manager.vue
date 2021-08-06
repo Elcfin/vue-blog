@@ -1,13 +1,19 @@
 <template>
   <div class="wrap">
-    <manager-tag></manager-tag>
-    <manager-draft @WriteArticle="$emit('WriteArticle')"
-                   @readArticle="readArticle"
-                   @editArticle="editArticle"
-                   @deleteArticle="deleteArticle"></manager-draft>
-    <manager-public @readArticle="readArticle"
-                    @editArticle="editArticle"
-                    @deleteArticle="deleteArticle"></manager-public>
+    <suspense>
+      <manager-tag></manager-tag>
+    </suspense>
+    <suspense>
+      <manager-draft @WriteArticle="$emit('WriteArticle')"
+                     @readArticle="readArticle"
+                     @editArticle="editArticle"
+                     @deleteArticle="deleteArticle"></manager-draft>
+    </suspense>
+    <suspense>
+      <manager-public @readArticle="readArticle"
+                      @editArticle="editArticle"
+                      @deleteArticle="deleteArticle"></manager-public>
+    </suspense>
   </div>
 </template>
 
